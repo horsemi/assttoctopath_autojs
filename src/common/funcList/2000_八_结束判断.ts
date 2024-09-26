@@ -1,7 +1,7 @@
 import { Script } from '@/system/script';
 import { IFuncOrigin } from '@/interface/IFunc';
 export class Func2000 implements IFuncOrigin {
-	id = 0;
+	id = 2000;
 	name = '结束判断';
 	desc = '配置停止或切换方案的条件';
 	config = [{
