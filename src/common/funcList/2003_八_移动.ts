@@ -5,6 +5,7 @@ import { Script } from '@/system/script';
 const left = 0;
 const center = 1;
 const right = 2;
+const CoordinateMap = ['左上', '右上', '右下', '左下'];
 
 export class Func2003 implements IFuncOrigin {
 	id = 2003;
@@ -12,7 +13,23 @@ export class Func2003 implements IFuncOrigin {
 	desc = '';
 	config = [{
 		desc: '配置',
-		config: []
+		config: [
+			{
+				name: 'first_map_coordinate',
+				desc: '小地图第一坐标',
+				type: 'list',
+				data: CoordinateMap,
+				default: '',
+				value: '',
+			},
+			{
+				name: 'second_map_coordinate',
+				desc: '小地图第二坐标',
+				type: 'list',
+				data: CoordinateMap,
+				default: '',
+				value: '',
+			},]
 	}];
 	operator: IFuncOperatorOrigin[] = [{ // 00 检测到菜单
 		desc: [
@@ -42,7 +59,9 @@ export class Func2003 implements IFuncOrigin {
 		],
 		oper: [
 			[center, 1280, 720, 327, 183, 397, 246, 1000],		//	点开小地图左上角
+			[center, 1280, 720, 745, 155, 815, 203, 1000],		//	点开小地图右上角
 			[center, 1280, 720, 747, 486, 819, 534, 1000],		//	点开小地图右下角
+			[left, 1280, 720, 296, 442, 381, 502, 1000],		//	点开小地图左下角
 		]
 	}];
 	operatorFunc(thisScript: Script, thisOperator: IFuncOperator[]): boolean {
@@ -58,12 +77,20 @@ export class Func2003 implements IFuncOrigin {
 			],
 		})) {
 			thisScript.global.banquet_change_flag = !thisScript.global.banquet_change_flag;
+
+			let first_map_coordinate = 0;
+			let second_map_coordinate = 1;
+			if (thisconf) {
+				first_map_coordinate = getCoordinate(thisconf.first_map_coordinate as string);
+				second_map_coordinate = getCoordinate(thisconf.second_map_coordinate as string);
+			}
+
 			return thisScript.oper({
 				id: 2003,
 				name: '移动',
 				operator: [
 					{
-						oper: [thisOperator[1].oper[thisScript.global.banquet_change_flag ? 0 : 1]],
+						oper: [thisOperator[1].oper[thisScript.global.banquet_change_flag ? first_map_coordinate : second_map_coordinate]],
 					},
 				],
 			})
@@ -99,6 +126,10 @@ export class Func2003 implements IFuncOrigin {
 
 		return false;
 	}
+}
+
+function getCoordinate(param: string) {
+	return CoordinateMap.findIndex(item => item === param);
 }
 
 export default new Func2003();

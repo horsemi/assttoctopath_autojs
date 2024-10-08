@@ -36,13 +36,13 @@ export class Func2002 implements IFuncOrigin {
 		]
 	}];
 	operatorFunc(thisScript: Script, thisOperator: IFuncOperator[]): boolean {
-		const thisconf = thisScript.scheme.config['2002'];
+		// const thisconf = thisScript.scheme.config['2002'];
 
 		return thisScript.oper({
 			id: 2002,
 			name: '退出结算',
 			operator: [
-				thisOperator[0], 
+				thisOperator[0],
 			]
 		});
 	}
